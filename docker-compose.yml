@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: zookeeper:3.4
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    depends_on:
+      - zookeeper
+    hostname: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_MESSAGE_MAX_BYTES: 20000000
+      KAFKA_BROKER_ID: 0
+      KAFKA_CREATE_TOPICS: "AMOR_forwarderCommands:1:1,AMOR_forwarderStatus:1:1,AMOR_fileWriterCommands:1:1,AMOR_fileWriterStatus:1:1"
+
+  forwarder:
+    image: screamingudder/forwarder:748acfc
+    depends_on:
+      - kafka
+    network_mode: "host"
+    volumes:
+      - ./config-files/forwarder_config.ini:/forwarder_config.ini
+    environment:
+      UPDATE_PERIOD: 60000
+      
+  file-writer:
+    image: screamingudder/file-writer:324079d
+    depends_on:
+      - kafka
+    network_mode: "host"
+    environment:
+      CONFIG_FILE: "/file_writer_config.ini"
+    volumes:
+      - ./output-files:/output-files
+      - ./config-files/file_writer_config.ini:/file_writer_config.ini
+
+  amor-epics:
+    image: mbrambilla/sinq:amor-epics
+    cap_add:
+      - NET_ADMIN
+    network_mode: "host"
+    ports:
+      - "5064:5064/tcp"
+      - "5064:5064/udp"
+      - "5065:5065/tcp"
+      - "8080:8080"
+
+#  amor-nicos:
+#    image: sinq-nicos
+#    network_mode: "host"
+#    depends_on:
+##      - kafka
+#      - amor-epics
+#        #      - file-writer
+##      - forwarder
+#    volumes:
+#      - /tmp/.X11-unix:/tmp/.X11-unix
+#      - /home/scratch/dev/nicos-core:/nicos-core
+#      - /etc/localtime:/etc/localtime:ro
+#      - /home/amor:/home/amor
+#
+
