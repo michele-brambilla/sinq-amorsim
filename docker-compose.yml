@@ -49,7 +49,13 @@ services:
       - "5064:5064/tcp"
       - "5064:5064/udp"
       - "5065:5065/tcp"
+
+  amor-hm:
+    image: mbrambilla/sinq:histogram-memory
+    network_mode: "host"
+    ports:
       - "8080:8080"
+
 
 #  amor-nicos:
 #    image: sinq-nicos
