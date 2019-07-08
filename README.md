@@ -48,4 +48,20 @@ amor-epics:
     - "5080:5065/tcp"
 ```
 
+## Known bugs
+
+Due to Kafka startup delays the *forwarder* and the *filewriter* could fail at startup. Please inspect that all the containers are running
+```
+docker ps
+```
+
+If one of the containers (or both) are missing restart it with
+```
+docker start <container name or id>
+```
+where container name can be found in the list of stopped containers
+```
+docker ps -f "status=exited"
+```
+
 
