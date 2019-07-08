@@ -17,7 +17,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_MESSAGE_MAX_BYTES: 20000000
       KAFKA_BROKER_ID: 0
-      KAFKA_CREATE_TOPICS: "AMOR_forwarderCommands:1:1,AMOR_forwarderStatus:1:1,AMOR_fileWriterCommands:1:1,AMOR_fileWriterStatus:1:1,AMOR_nicosCacheCompacted:1:1:compact,AMOR_nicosCacheHistory:1:1"
+      KAFKA_CREATE_TOPICS: "AMOR_forwarderCommands:1:1,AMOR_forwarderStatus:1:1,AMOR_filewriterCommands:1:1,AMOR_filewriterStatus:1:1,AMOR_nicosCacheCompacted:1:1:compact,AMOR_nicosCacheHistory:1:1"
 
   forwarder:
     image: screamingudder/forwarder:748acfc
