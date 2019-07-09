@@ -57,18 +57,21 @@ services:
       - "8080:8080"
 
 
-#  amor-nicos:
-#    image: sinq-nicos
-#    network_mode: "host"
-#    depends_on:
-##      - kafka
-#      - amor-epics
-#        #      - file-writer
-##      - forwarder
-#    volumes:
+  amor-nicos:
+    image: nicos:latest
+    network_mode: "host"
+    command: etc/nicos-system start
+    ports:
+      - 1301:1301
+    depends_on:
+      - kafka
+      - amor-epics
+      - file-writer
+      - forwarder
+    volumes:
 #      - /tmp/.X11-unix:/tmp/.X11-unix
 #      - /home/scratch/dev/nicos-core:/nicos-core
-#      - /etc/localtime:/etc/localtime:ro
+      - /etc/localtime:/etc/localtime:ro
 #      - /home/amor:/home/amor
 #
 
